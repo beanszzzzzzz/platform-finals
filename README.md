@@ -130,11 +130,14 @@ Repository to deploy:
      - `APP_DEBUG=0`
      - `APP_SECRET` to a long random string
      - `RUN_MIGRATIONS=1`
-     - `MYSQL_DATABASE` (same as MySQL service DB name)
-     - `MYSQL_USER` (same as MySQL service user)
-     - `MYSQL_PASSWORD` (same as MySQL service password)
-     - `DATABASE_URL` in this format:
-         - `mysql://<MYSQL_USER>:<MYSQL_PASSWORD>@<MYSQL_HOST>:<MYSQL_PORT>/<MYSQL_DATABASE>?serverVersion=8.0.32&charset=utf8mb4`
+         - If Railway exposes MySQL service variables, the app will build `DATABASE_URL` automatically from:
+             - `MYSQLHOST`
+             - `MYSQLPORT`
+             - `MYSQLDATABASE`
+             - `MYSQLUSER`
+             - `MYSQLPASSWORD`
+         - If Railway does not provide those variables, set `DATABASE_URL` manually in this format:
+             - `mysql://<MYSQL_USER>:<MYSQL_PASSWORD>@<MYSQL_HOST>:<MYSQL_PORT>/<MYSQL_DATABASE>?serverVersion=8.0.32&charset=utf8mb4`
 7. Redeploy the app service after variables are saved.
 8. Open the generated Railway public URL and verify the homepage loads.
 
