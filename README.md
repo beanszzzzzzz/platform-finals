@@ -114,6 +114,36 @@ Recommended platform:
 
 - Railway
 
+## Railway Deployment Steps (Using GitHub)
+
+Repository to deploy:
+
+- https://github.com/thv-maker/finalproject.git
+
+1. Push this project code to your GitHub repository.
+2. In Railway, click New Project -> Deploy from GitHub repo.
+3. Select `thv-maker/finalproject`.
+4. Railway will detect `railway.toml` and build with `Dockerfile.railway`.
+5. Add a MySQL service in the same Railway project.
+6. Open your app service Variables tab and set:
+     - `APP_ENV=prod`
+     - `APP_DEBUG=0`
+     - `APP_SECRET` to a long random string
+     - `RUN_MIGRATIONS=1`
+     - `MYSQL_DATABASE` (same as MySQL service DB name)
+     - `MYSQL_USER` (same as MySQL service user)
+     - `MYSQL_PASSWORD` (same as MySQL service password)
+     - `DATABASE_URL` in this format:
+         - `mysql://<MYSQL_USER>:<MYSQL_PASSWORD>@<MYSQL_HOST>:<MYSQL_PORT>/<MYSQL_DATABASE>?serverVersion=8.0.32&charset=utf8mb4`
+7. Redeploy the app service after variables are saved.
+8. Open the generated Railway public URL and verify the homepage loads.
+
+### Notes for Railway
+
+- `Dockerfile.railway` runs Nginx and PHP-FPM in one container (required for single-service HTTP deployment).
+- Port binding is handled through Railway `PORT` using `nginx-main.railway.conf.template`.
+- Keep `docker-compose.yaml` for local development; Railway uses `railway.toml` + `Dockerfile.railway`.
+
 ## Notes
 
 This project is intended for educational purposes and demonstrates full-stack containerized deployment practices using Symfony.
