@@ -38,17 +38,58 @@ RUN apk add --no-cache \
 COPY --from=composer_deps /app/vendor ./vendor
 COPY . .
 
+# Create nginx config directly (no template needed)
+RUN mkdir -p /etc/nginx/http.d && cat > /etc/nginx/http.d/default.conf << 'EOF'
+server {
+    listen 80;
+    server_name _;
+    root /var/www/public;
+    index index.php;
+
+    location / {
+        try_files $uri /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_read_timeout 60;
+    }
+
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        fastcgi_param HTTPS off;
+        fastcgi_buffer_size 32k;
+        fastcgi_buffers 8 16k;
+    }
+
+    location ~* \.(?:css|js|jpg|jpeg|gif|png|ico|svg|woff2?)$ {
+        expires 7d;
+        add_header Cache-Control "public";
+        access_log off;
+        try_files $uri /index.php$is_args$args;
+    }
+
+    location ~ /\. {
+        deny all;
+    }
+}
+EOF
+
 RUN APP_ENV=prod php bin/console importmap:install --no-interaction \
     && mkdir -p var/cache var/log \
     && chown -R www-data:www-data /var/www \
     && chmod +x /var/www/entrypoint.railway.sh
 
-COPY nginx-main.railway.conf.template /etc/nginx/http.d/default.conf.template
-
 ENV APP_ENV=prod
-ENV PORT=8080
 ENV APP_SECRET=ChangeMe_GenerateARandomSecretKeyInProduction_1234567890
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT ["/var/www/entrypoint.railway.sh"]
