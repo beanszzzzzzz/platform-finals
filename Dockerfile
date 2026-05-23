@@ -37,7 +37,8 @@ RUN apk add --no-cache \
 COPY --from=composer_deps /app/vendor ./vendor
 COPY . .
 
-RUN APP_ENV=prod php bin/console importmap:install --no-interaction
+RUN APP_ENV=dev php bin/console importmap:install --no-interaction
+RUN rm -rf var/cache/*
 
 RUN mkdir -p var/cache var/log \
     && chown -R www-data:www-data /var/www \
