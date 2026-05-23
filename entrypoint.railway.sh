@@ -24,9 +24,6 @@ fi
 mkdir -p var/cache var/log
 chmod -R 777 var
 
-# Copy nginx config
-cp /etc/nginx/http.d/default.conf.template /etc/nginx/http.d/default.conf
-
 # Start PHP-FPM in background
 php-fpm -D
 
