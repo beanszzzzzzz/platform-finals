@@ -82,8 +82,9 @@ server {
 }
 EOF
 
-RUN rm -rf var/cache/* && \
-    APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear --env=prod && \
+RUN rm -rf var/cache && \
+    rm -rf var/log && \
+    APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear --env=prod --no-warmup && \
     APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup --env=prod && \
     APP_ENV=prod php bin/console importmap:install --no-interaction && \
     mkdir -p var/cache var/log && \
