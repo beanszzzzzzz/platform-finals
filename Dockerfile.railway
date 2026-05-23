@@ -47,6 +47,7 @@ COPY nginx-main.railway.conf.template /etc/nginx/http.d/default.conf.template
 
 ENV APP_ENV=prod
 ENV PORT=8080
+ENV APP_SECRET=ChangeMe_GenerateARandomSecretKeyInProduction_1234567890
 
 EXPOSE 8080
 
