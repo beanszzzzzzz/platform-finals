@@ -45,6 +45,9 @@ RUN mkdir -p /etc/nginx/http.d
 # Copy nginx config template
 COPY nginx-main.conf /etc/nginx/http.d/default.conf.template
 
+# Copy PHP-FPM config
+COPY php-fpm.conf /usr/local/etc/php-fpm.d/railway.conf
+
 # Build assets and prepare cache
 RUN APP_ENV=dev php bin/console importmap:install --no-interaction
 RUN mkdir -p var/cache var/log
