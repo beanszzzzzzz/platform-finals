@@ -45,12 +45,14 @@ RUN mkdir -p /etc/nginx/http.d
 # Copy nginx config template
 COPY nginx-main.conf /etc/nginx/http.d/default.conf.template
 
+# Build assets and prepare cache
 RUN APP_ENV=dev php bin/console importmap:install --no-interaction
-RUN rm -rf var/cache/*
+RUN mkdir -p var/cache var/log
+RUN APP_ENV=prod php bin/console cache:warmup --env=prod || true
 
-RUN mkdir -p var/cache var/log \
-    && chown -R www-data:www-data /var/www \
-    && chmod +x /var/www/entrypoint.railway.sh
+# Ensure correct permissions
+RUN chmod 755 /var/www/entrypoint.railway.sh
+RUN chmod -R 777 var
 
 ENV APP_ENV=prod
 ENV PORT=8080
