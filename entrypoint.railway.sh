@@ -24,8 +24,8 @@ fi
 mkdir -p var/cache var/log
 chmod -R 777 var
 
-# Generate nginx config from template
-envsubst '${PORT}' < /etc/nginx/http.d/default.conf.template > /etc/nginx/http.d/default.conf
+# Copy nginx config
+cp /etc/nginx/http.d/default.conf.template /etc/nginx/http.d/default.conf
 
 # Start PHP-FPM in background
 php-fpm -D

@@ -21,7 +21,6 @@ RUN apk add --no-cache \
     libzip \
     oniguruma \
     nginx \
-    gettext \
     && apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
     icu-dev \
@@ -58,7 +57,6 @@ RUN chmod 755 /var/www/entrypoint.railway.sh
 RUN chmod -R 777 var
 
 ENV APP_ENV=prod
-ENV PORT=8080
 
 EXPOSE 8080
 
