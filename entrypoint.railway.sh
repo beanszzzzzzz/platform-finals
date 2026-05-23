@@ -30,7 +30,7 @@ if [ "${APP_ENV:-prod}" = "prod" ]; then
 fi
 
 if [ "${RUN_MIGRATIONS:-1}" = "1" ]; then
-  php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration || true
+  php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 fi
 
 # Prevent permission issues from startup commands running as root.
