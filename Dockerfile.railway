@@ -82,11 +82,13 @@ server {
 }
 EOF
 
-RUN APP_ENV=prod php bin/console importmap:install --no-interaction \
-    && APP_ENV=prod php bin/console cache:warmup --env=prod \
-    && mkdir -p var/cache var/log \
-    && chown -R www-data:www-data /var/www \
-    && chmod +x /var/www/entrypoint.railway.sh
+RUN rm -rf var/cache/* && \
+    APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear --env=prod && \
+    APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup --env=prod && \
+    APP_ENV=prod php bin/console importmap:install --no-interaction && \
+    mkdir -p var/cache var/log && \
+    chown -R www-data:www-data /var/www && \
+    chmod +x /var/www/entrypoint.railway.sh
 
 ENV APP_ENV=prod
 ENV APP_SECRET=ChangeMe_GenerateARandomSecretKeyInProduction_1234567890
