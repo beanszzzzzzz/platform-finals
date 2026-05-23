@@ -3,12 +3,6 @@ set -eu
 
 cd /var/www
 
-# Ensure APP_SECRET is set
-if [ -z "${APP_SECRET:-}" ]; then
-  echo "ERROR: APP_SECRET is not set. Please set it as an environment variable."
-  exit 1
-fi
-
 if [ -z "${DATABASE_URL:-}" ]; then
   if [ -n "${MYSQL_URL:-}" ]; then
     export DATABASE_URL="$MYSQL_URL"
