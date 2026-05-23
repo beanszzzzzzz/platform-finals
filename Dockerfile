@@ -58,6 +58,6 @@ RUN chmod -R 777 var
 
 ENV APP_ENV=prod
 
-EXPOSE 8080
+EXPOSE 80
 
 ENTRYPOINT ["/var/www/entrypoint.railway.sh"]
