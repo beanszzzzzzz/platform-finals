@@ -24,6 +24,9 @@ fi
 mkdir -p var/cache var/log
 chmod -R 777 var
 
+# Run database migrations
+php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration || true
+
 # Start PHP-FPM in background
 php-fpm -D
 
